@@ -3,7 +3,6 @@ package com.challenge.luizalabs.v1.controller;
 import com.challenge.luizalabs.dto.CustomerDtoRequest;
 import com.challenge.luizalabs.dto.CustomerDtoResponse;
 import com.challenge.luizalabs.service.CustomerService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 
@@ -30,22 +29,40 @@ public class CustomerController {
   @Autowired
   private CustomerService customerService;
 
+  /**
+   * Method responsible to return all customers.
+   *
+   * @return {Array<CustomerDtoResponse/>}
+   */
   @GetMapping
   @ApiOperation(value = "Get all customers", response = CustomerDtoResponse.class,
       authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<List<?>> getAllCustomers() {
-    final List<CustomerDtoResponse> dto = this.customerService.getAll();
-    return ResponseEntity.ok(dto);
+    final List<CustomerDtoResponse> customerDtoList = this.customerService.getAll();
+    return ResponseEntity.ok(customerDtoList);
   }
 
+  /**
+   * Method responsible to return only one customer by id.
+   *
+   * @param id {Long} customer id
+   * @return {CustomerDtoResponse}
+   */
   @GetMapping(value = "/{id}")
   @ApiOperation(value = "Get customer by id", response = CustomerDtoResponse.class,
       authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
-    final CustomerDtoResponse dto = this.customerService.getById(id);
-    return ResponseEntity.ok(dto);
+    final CustomerDtoResponse customerDto = this.customerService.getById(id);
+    return ResponseEntity.ok(customerDto);
   }
 
+  /**
+   * Method responsible to insert new customer (it isn't possible to create two customers
+   * with the same e-mail).
+   *
+   * @param CustomerDtoRequest {<String>email</String>, <String>name</String>}
+   * @return {CustomerDtoResponse}
+   */
   @PostMapping
   @ApiOperation(value = "Insert customer", response = CustomerDtoResponse.class,
       authorizations = @Authorization(value = "Bearer"))
@@ -55,6 +72,13 @@ public class CustomerController {
     return new ResponseEntity<>(customerDtoResponse, HttpStatus.CREATED);
   }
 
+  /**
+   * Method responsible to update a customer.
+   *
+   * @param id                 {Long} customer id
+   * @param CustomerDtoRequest {<String/> email, <String/> name}
+   * @return {CustomerDtoResponse}
+   */
   @PutMapping(value = "{id}")
   @ApiOperation(value = "Update customer", response = CustomerDtoResponse.class,
       authorizations = @Authorization(value = "Bearer"))
@@ -64,6 +88,12 @@ public class CustomerController {
     return new ResponseEntity<>(customerDtoResponse, HttpStatus.OK);
   }
 
+  /**
+   * Method responsible to delete a customer by id.
+   *
+   * @param id {Long} customer id
+   * @return {}
+   */
   @DeleteMapping(value = "{id}")
   @ApiOperation(value = "Delete customer by id", authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<?> deleteCustomer(@PathVariable Long id) {
