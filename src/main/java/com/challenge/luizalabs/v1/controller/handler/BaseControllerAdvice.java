@@ -6,21 +6,27 @@ import com.challenge.luizalabs.exception.EntityAlreadyExistsException;
 import com.challenge.luizalabs.exception.EntityNotFoundException;
 import com.challenge.luizalabs.exception.InternalServerErrorException;
 import com.challenge.luizalabs.exception.MissingParameterException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,6 +51,240 @@ public class BaseControllerAdvice {
                 + " We apologize for the inconvenience.")
         .errorCode(10000)
         .build());
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public List<ResponseError.ErrorMessage> exception(final MethodArgumentNotValidException ex) {
+
+    final List<FieldError> fields = ex.getBindingResult().getFieldErrors();
+
+    final List<ResponseError.ErrorMessage> errorMessages = new ArrayList<>();
+
+    fields.forEach(field -> {
+
+      if ("NotNull".equalsIgnoreCase(field.getCode())
+          || "NotBlank".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format("Missing body parameter {0}", field.getField()))
+                .userMessage(
+                    format("Field {0} is required and can not be empty", field.getField()))
+                .errorCode(20001)
+                .build());
+
+      } else if ("Min".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format(
+                        "Invalid body parameter {0}"
+                            + " - it must be filled with a value greater than {1}",
+                        field.getField(),
+                        this.getValue(field)))
+                .userMessage(
+                    format(
+                        "Invalid field {0} - it must be filled with a value greater than {1}",
+                        field.getField(),
+                        this.getValue(field)))
+                .errorCode(20004)
+                .build());
+
+      } else if ("Max".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format(
+                        "Invalid body parameter {0}"
+                            + " - it must be filled with a value lesser than {1}",
+                        field.getField(),
+                        this.getValue(field)))
+                .userMessage(
+                    format(
+                        "Invalid field {0} - it must be filled with a value lesser than {1}",
+                        field.getField(),
+                        this.getValue(field)))
+                .errorCode(20005)
+                .build());
+
+      } else if ("Email".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format(
+                        "Invalid body parameter {0} - it must be filled with a valid email",
+                        field.getField()))
+                .userMessage(
+                    format(
+                        "Invalid field {0} - it must be filled with a valid email",
+                        field.getField()))
+                .errorCode(20013)
+                .build());
+
+      } else if ("cpf".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format(
+                        "Invalid body parameter {0} - it must be filled with a valid CPF",
+                        field.getField()))
+                .userMessage(
+                    format(
+                        "Invalid field {0} - it must be filled with a valid CPF",
+                        field.getField()))
+                .errorCode(20010)
+                .build());
+
+      } else if ("cnpj".equalsIgnoreCase(field.getCode())) {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage(
+                    format(
+                        "Invalid body parameter {0} - it must be filled with a valid CNPJ",
+                        field.getField()))
+                .userMessage(
+                    format(
+                        "Invalid field {0} - it must be filled with a valid CNPJ",
+                        field.getField()))
+                .errorCode(20011)
+                .build());
+      } else if ("size".equalsIgnoreCase(field.getCode())) {
+
+        Integer param01 = Integer.valueOf(field.getArguments()[1].toString());
+        Integer param02 = Integer.valueOf(field.getArguments()[2].toString());
+
+        if (field.getRejectedValue().toString().length() > param01
+            && field.getRejectedValue().toString().length() > param02) {
+          errorMessages.add(ResponseError.ErrorMessage.builder()
+              .developerMessage(
+                  format(
+                      "Invalid body parameter {0} - "
+                          + "it must be filled with a value lesser or equals than {1}",
+                      field.getField(),
+                      param01 > param02 ? param01 : param02))
+              .userMessage(
+                  format(
+                      "Invalid field {0} - "
+                          + "it must be filled with a value lesser or equals than {1}",
+                      field.getField(),
+                      param01 > param02 ? param01 : param02))
+              .errorCode(20088)
+              .build());
+        } else {
+          errorMessages.add(
+              ResponseError.ErrorMessage.builder()
+                  .developerMessage(
+                      format(
+                          "Invalid body parameter {0} - "
+                              + "it must be filled with a value greater or equals than {1}",
+                          field.getField(),
+                          param01 > param02 ? param02 : param01))
+                  .userMessage(
+                      format(
+                          "Invalid field {0} - "
+                              + "it must be filled with a value greater or equals than {1}",
+                          field.getField(),
+                          param01 > param02 ? param02 : param01))
+                  .errorCode(20087)
+                  .build());
+        }
+      } else {
+
+        errorMessages.add(
+            ResponseError.ErrorMessage.builder()
+                .developerMessage("Malformed request body")
+                .userMessage("Malformed request body")
+                .errorCode(20020)
+                .build());
+      }
+    });
+
+    return errorMessages;
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public List<ResponseError.ErrorMessage> exception(final HttpMessageNotReadableException ex) {
+
+    final Throwable cause = ex.getCause();
+
+    if (cause instanceof JsonMappingException) {
+
+      final JsonMappingException jsonMappingException = (JsonMappingException) cause;
+
+      final String field = this.getField(jsonMappingException);
+
+      final String message = Optional.of(ex)
+          .map(NestedRuntimeException::getMessage)
+          .orElse("");
+
+      if (message.contains("java.lang.Short")
+          || message.contains("java.lang.Integer")
+          || message.contains("java.lang.Long")) {
+
+        return Collections.singletonList(ResponseError.ErrorMessage.builder()
+            .developerMessage(
+                format(
+                    "Invalid body parameter {0} - it must be filled with a valid integer number",
+                    field))
+            .userMessage(
+                format(
+                    "Invalid field {0} - it must be filled with a valid integer number",
+                    field))
+            .errorCode(20002).build());
+
+      } else if (message.contains("java.lang.Double")
+          || message.contains("java.lang.Float")) {
+
+        return Collections.singletonList(ResponseError.ErrorMessage.builder()
+            .developerMessage(
+                format("Invalid body parameter {0} - it must be filled with a valid number", field))
+            .userMessage(
+                format("Invalid field {0} - it must be filled with a valid number", field))
+            .errorCode(20007).build());
+
+      } else if (message.contains("java.lang.Boolean")) {
+
+        return Collections.singletonList(ResponseError.ErrorMessage.builder()
+            .developerMessage(
+                format(
+                    "Invalid body parameter {0}"
+                        + " - it must be filled with a valid boolean (true or false)",
+                    field))
+            .userMessage(
+                format(
+                    "Invalid field {0} - it must be filled with a true or false",
+                    field))
+            .errorCode(20009).build());
+
+      } else if (message.contains("java.util.UUID")) {
+        return Collections.singletonList(ResponseError.ErrorMessage.builder()
+            .developerMessage(
+                format(
+                    "Invalid body parameter {0} - it must be filled with a valid UUID",
+                    field))
+            .userMessage(
+                format(
+                    "Invalid field {0} - it must be filled with a valid UUID",
+                    field))
+            .errorCode(20012)
+            .build());
+      }
+    }
+
+    return Collections.singletonList(ResponseError.ErrorMessage.builder()
+        .developerMessage("Malformed request body")
+        .userMessage("Malformed request body")
+        .errorCode(20020).build());
   }
 
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -205,20 +445,6 @@ public class BaseControllerAdvice {
     return errorMessages;
   }
 
-  @ExceptionHandler(InternalServerErrorException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ResponseBody
-  public List<ResponseError.ErrorMessage> exception(final InternalServerErrorException ex) {
-    return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("Internal server error {0}", ex.getParameters()))
-        .userMessage(
-            "Was encountered an error when processing your request."
-                + " We apologize for the inconvenience.")
-        .errorCode(10000)
-        .build());
-  }
-
   @ExceptionHandler(EmptyResultDataAccessException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ResponseBody
@@ -233,6 +459,20 @@ public class BaseControllerAdvice {
         .build());
   }
 
+  @ExceptionHandler(InternalServerErrorException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ResponseBody
+  public List<ResponseError.ErrorMessage> exception(final InternalServerErrorException ex) {
+    return Collections.singletonList(ResponseError.ErrorMessage.builder()
+        .developerMessage(
+            format("Internal server error {0}", ex.getParameters()))
+        .userMessage(
+            "Was encountered an error when processing your request."
+                + " We apologize for the inconvenience.")
+        .errorCode(10000)
+        .build());
+  }
+
   @ResponseBody
   @ExceptionHandler(MissingParameterException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -244,6 +484,26 @@ public class BaseControllerAdvice {
             format("Field {1} is required and can not be empty", ex.getParameters()))
         .errorCode(20001)
         .build());
+  }
+
+  private String getField(final JsonMappingException jsonMappingException) {
+    return jsonMappingException.getPath().stream()
+        .map(t -> t.getFieldName() != null ? t.getFieldName() : "[" + t.getIndex() + "]")
+        .reduce((t, u) -> {
+          if (u.contains("[")) {
+            return t + u;
+          } else {
+            return t + "." + u;
+          }
+        })
+        .orElse(null);
+  }
+
+  private Long getValue(final FieldError fieldError) {
+    return (Long) Optional.ofNullable(fieldError.getArguments())
+        .filter(t -> t.length > 1)
+        .map(t -> t[1])
+        .orElse(null);
   }
 
 }

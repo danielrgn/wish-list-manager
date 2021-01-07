@@ -34,21 +34,23 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
   @Bean
-  public Docket eDesignApi(SwaggerConfigProperties swaggerConfigProperties) {
+  public Docket designApi(SwaggerConfigProperties swaggerConfigProperties) {
     return new Docket(DocumentationType.SWAGGER_2)
-    .apiInfo(apiInfo(swaggerConfigProperties))
-    .enable(Boolean.valueOf(swaggerConfigProperties.getEnabled()))
-    .select()
-    .apis(RequestHandlerSelectors.basePackage("com.challenge.luizalabs.v1.controller"))
-    .paths(PathSelectors.any())
-    .build()
-    .securitySchemes(Arrays.asList(new ApiKey("/oauth2/token", HttpHeaders.AUTHORIZATION, In.HEADER.name())))
-    .securityContexts(Arrays.asList(securityContext()))
-    .pathMapping("/")
-    .directModelSubstitute(LocalDate.class, String.class)
-    .genericModelSubstitutes(ResponseEntity.class)
-    .useDefaultResponseMessages(Boolean.valueOf(swaggerConfigProperties.getUseDefaultResponseMessages()))
-    .enableUrlTemplating(Boolean.valueOf(swaggerConfigProperties.getEnableUrlTemplating()));
+        .apiInfo(apiInfo(swaggerConfigProperties))
+        .enable(Boolean.valueOf(swaggerConfigProperties.getEnabled()))
+        .select()
+        .apis(RequestHandlerSelectors.basePackage("com.challenge.luizalabs.v1.controller"))
+        .paths(PathSelectors.any())
+        .build()
+        .securitySchemes(Arrays.asList(new ApiKey("/oauth2/token",
+            HttpHeaders.AUTHORIZATION, In.HEADER.name())))
+        .securityContexts(Arrays.asList(securityContext()))
+        .pathMapping("/")
+        .directModelSubstitute(LocalDate.class, String.class)
+        .genericModelSubstitutes(ResponseEntity.class)
+        .useDefaultResponseMessages(Boolean.valueOf(swaggerConfigProperties
+            .getUseDefaultResponseMessages()))
+        .enableUrlTemplating(Boolean.valueOf(swaggerConfigProperties.getEnableUrlTemplating()));
   }
 
   private SecurityContext securityContext() {
@@ -70,27 +72,31 @@ public class SwaggerConfig {
   @Bean
   UiConfiguration uiConfig(SwaggerConfigProperties swaggerConfigProperties) {
     return UiConfigurationBuilder.builder()
-    .deepLinking(Boolean.valueOf(swaggerConfigProperties.getDeepLinking()))
-    .displayOperationId(Boolean.valueOf(swaggerConfigProperties.getDisplayOperationId()))
-    .defaultModelsExpandDepth(Integer.valueOf(swaggerConfigProperties.getDefaultModelsExpandDepth()))
-    .defaultModelExpandDepth(Integer.valueOf(swaggerConfigProperties.getDefaultModelExpandDepth()))
-    .defaultModelRendering(ModelRendering.EXAMPLE)
-    .displayRequestDuration(Boolean.valueOf(swaggerConfigProperties.getDisplayRequestDuration()))
-    .docExpansion(DocExpansion.NONE).filter(Boolean.valueOf(swaggerConfigProperties.getFilter()))
-    .maxDisplayedTags(Integer.valueOf(swaggerConfigProperties.getMaxDisplayedTags()))
-    .operationsSorter(OperationsSorter.ALPHA)
-    .showExtensions(Boolean.valueOf(swaggerConfigProperties.getShowExtensions())).tagsSorter(TagsSorter.ALPHA)
-    .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS).validatorUrl(null).build();
+        .deepLinking(Boolean.valueOf(swaggerConfigProperties.getDeepLinking()))
+        .displayOperationId(Boolean.valueOf(swaggerConfigProperties.getDisplayOperationId()))
+        .defaultModelsExpandDepth(Integer.valueOf(swaggerConfigProperties
+            .getDefaultModelsExpandDepth()))
+        .defaultModelExpandDepth(Integer.valueOf(swaggerConfigProperties.getDefaultModelExpandDepth()))
+        .defaultModelRendering(ModelRendering.EXAMPLE)
+        .displayRequestDuration(Boolean.valueOf(swaggerConfigProperties.getDisplayRequestDuration()))
+        .docExpansion(DocExpansion.NONE).filter(Boolean.valueOf(swaggerConfigProperties.getFilter()))
+        .maxDisplayedTags(Integer.valueOf(swaggerConfigProperties.getMaxDisplayedTags()))
+        .operationsSorter(OperationsSorter.ALPHA)
+        .showExtensions(Boolean.valueOf(swaggerConfigProperties.getShowExtensions()))
+        .tagsSorter(TagsSorter.ALPHA)
+        .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+        .validatorUrl(null).build();
   }
 
   private ApiInfo apiInfo(SwaggerConfigProperties swaggerConfigProperties) {
     return new ApiInfoBuilder()
-    .title(swaggerConfigProperties.getTitle())
-    .description(swaggerConfigProperties.getDescription())
-    .version(swaggerConfigProperties.getApiVersion())
-    .license(swaggerConfigProperties.getLicense())
-    .licenseUrl(swaggerConfigProperties.getLicenseUrl())
-    .contact(new Contact(swaggerConfigProperties.getAuthor(), swaggerConfigProperties.getGithubUrl(), ""))
-    .build();
+        .title(swaggerConfigProperties.getTitle())
+        .description(swaggerConfigProperties.getDescription())
+        .version(swaggerConfigProperties.getApiVersion())
+        .license(swaggerConfigProperties.getLicense())
+        .licenseUrl(swaggerConfigProperties.getLicenseUrl())
+        .contact(new Contact(swaggerConfigProperties.getAuthor(),
+            swaggerConfigProperties.getGithubUrl(), ""))
+        .build();
   }
 }
