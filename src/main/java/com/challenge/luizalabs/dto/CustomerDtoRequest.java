@@ -15,10 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CustomerDtoRequest {
 
-  @NotNull
+  @NotNull(message = "The field name can't be null")
   private String name;
 
-  @NotNull
+  @NotNull(message = "The field email can't be null")
   @Email
   private String email;
 }

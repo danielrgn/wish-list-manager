@@ -1,5 +1,6 @@
 package com.challenge.luizalabs.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
+
+  @Value("${oauth.username}")
+  private String username;
+
+  @Value("${oauth.password}")
+  private String password;
 
   @Bean
   @Override
@@ -34,8 +41,8 @@ public class WebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
     auth.inMemoryAuthentication()
         .passwordEncoder(passwordEncoder())
-        .withUser("admin")
-        .password(passwordEncoder().encode("secret"))
+        .withUser(username)
+        .password(passwordEncoder().encode(password))
         .roles("USER");
   }
 }

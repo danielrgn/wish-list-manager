@@ -35,6 +35,15 @@ spring:
 
 server.port: ${PORT:8080}
 
+oauth:
+  clientId: "admin"
+  clientSecret: "secret"
+  username: "admin"
+  password: "secret"
+  expiresIn: 86400
+  scopes: "web"
+  grantTypes: "password"
+
 swagger:
   enabled: true
   title: "WLM - Wish List Manager"
