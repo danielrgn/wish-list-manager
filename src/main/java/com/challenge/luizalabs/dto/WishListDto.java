@@ -1,4 +1,7 @@
-package com.challenge.luizalabs.model;
+package com.challenge.luizalabs.dto;
+
+import com.challenge.luizalabs.model.Customer;
+import com.challenge.luizalabs.model.Product;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,31 +15,13 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "wishlist")
-public class WishList {
+public class WishListDto {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(
-      name = "customer_id",
-      nullable = false
-  )
   private Customer customer;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(
-      name = "product_id",
-      nullable = false
-  )
   private Product product;
 }
