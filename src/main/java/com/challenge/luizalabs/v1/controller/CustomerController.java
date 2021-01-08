@@ -3,6 +3,7 @@ package com.challenge.luizalabs.v1.controller;
 import com.challenge.luizalabs.dto.CustomerDtoRequest;
 import com.challenge.luizalabs.dto.CustomerDtoResponse;
 import com.challenge.luizalabs.service.CustomerService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/customer")
-@Api(value="Customers")
+@Api(value="Customer")
 public class CustomerController {
 
   @Autowired

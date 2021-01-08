@@ -332,7 +332,7 @@ public class BaseControllerAdvice {
         .developerMessage(
             format("{0} already exists", ex.getParameters()))
         .userMessage(
-            format("You attempted to create {0}, but already exists", ex.getParameters()))
+            format("You attempted to create {0} already exists", ex.getParameters()))
         .errorCode(20033)
         .build());
   }
