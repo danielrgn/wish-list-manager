@@ -1,7 +1,6 @@
 package com.challenge.luizalabs.repository;
 
 import com.challenge.luizalabs.model.Product;
-import com.challenge.luizalabs.model.WishList;
 
 import java.util.UUID;
 

@@ -3,15 +3,12 @@ package com.challenge.luizalabs.service;
 import com.challenge.luizalabs.dto.ProductDto;
 import com.challenge.luizalabs.exception.InternalServerErrorException;
 import com.challenge.luizalabs.service.api.ApiChallengeService;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 
 import java.time.Duration;
 import java.util.UUID;
 import java.util.function.Supplier;
-
-import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
-import io.vavr.CheckedFunction0;
-import io.vavr.control.Try;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

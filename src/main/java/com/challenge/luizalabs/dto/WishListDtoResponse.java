@@ -1,14 +1,9 @@
 package com.challenge.luizalabs.dto;
 
-import com.challenge.luizalabs.model.Customer;
-import com.challenge.luizalabs.model.Product;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 

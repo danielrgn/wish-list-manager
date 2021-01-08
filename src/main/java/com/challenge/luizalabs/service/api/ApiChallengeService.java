@@ -29,7 +29,7 @@ public class ApiChallengeService {
   private RestTemplate restTemplate;
 
   /**
-   * Method responsible to call api challenge and return product by id
+   * Method responsible to call api challenge and return product by id.
    *
    * @param String id
    * @return ProductDto
