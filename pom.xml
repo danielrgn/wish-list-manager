@@ -26,6 +26,7 @@
 		<swagger-annotations.version>1.5.21</swagger-annotations.version>
 		<swagger-models.version>1.5.21</swagger-models.version>
 		<hibernate-validator.version>7.0.0.Final</hibernate-validator.version>
+		<resilience4j.version>0.13.2</resilience4j.version>
 	</properties>
 
 	<dependencies>
@@ -36,6 +37,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-retry</artifactId>
+			<version>${resilience4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
