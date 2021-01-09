@@ -1,8 +1,9 @@
 package com.challenge.luizalabs.v1.controller;
 
-import com.challenge.luizalabs.dto.CustomerDtoResponse;
-import com.challenge.luizalabs.dto.WishListDtoResponse;
 import com.challenge.luizalabs.service.WishListService;
+import com.challenge.luizalabs.v1.dto.CustomerDtoRequest;
+import com.challenge.luizalabs.v1.dto.CustomerDtoResponse;
+import com.challenge.luizalabs.v1.dto.WishListDtoResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -31,10 +32,10 @@ public class WishListController {
    * Method responsible to return wish list from one customer id.
    *
    * @param customerId {Long} customer id
-   * @return {WishListDtoResponse}
+   * @return {ResponseEntity}
    */
   @GetMapping(value = "/customer/{customerId}")
-  @ApiOperation(value = "Get wish list by customer id", response = CustomerDtoResponse.class,
+  @ApiOperation(value = "Get wish list by customer id", response = CustomerDtoRequest.class,
       authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<?> getWishListByCustomerId(@PathVariable Long customerId) {
     final WishListDtoResponse wishListDtoResponse =
@@ -47,7 +48,7 @@ public class WishListController {
    *
    * @param customerId {Long} customer id
    * @param productId  {UUID} product id from api challenge
-   * @return {WishListDtoResponse}
+   * @return {ResponseEntity}
    */
   @PostMapping(value = "/customer/{customerId}/product/{productId}")
   @ApiOperation(value = "Insert wish list", response = CustomerDtoResponse.class,
@@ -62,7 +63,7 @@ public class WishListController {
    * Method responsible to delete a wish list by customer id.
    *
    * @param customerId {Long} customer id
-   * @return {}
+   * @return {ResponseEntity}
    */
   @DeleteMapping(value = "/customer/{customerId}")
   @ApiOperation(value = "Delete wish list by customer id",

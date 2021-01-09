@@ -1,4 +1,4 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

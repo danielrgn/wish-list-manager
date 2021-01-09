@@ -1,4 +1,4 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package com.challenge.luizalabs.service.api;
 
-import com.challenge.luizalabs.dto.ProductDto;
 import com.challenge.luizalabs.exception.EntityNotFoundException;
 import com.challenge.luizalabs.exception.InternalServerErrorException;
+import com.challenge.luizalabs.v1.dto.ProductDto;
 
 import java.text.MessageFormat;
 import java.util.UUID;
@@ -31,7 +31,7 @@ public class ApiChallengeService {
   /**
    * Method responsible to call api challenge and return product by id.
    *
-   * @param String id
+   * @param productId {UUID}
    * @return ProductDto
    */
   public ProductDto getProductById(final UUID productId) {

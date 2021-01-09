@@ -1,4 +1,4 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import com.challenge.luizalabs.model.Customer;
 import com.challenge.luizalabs.model.Product;

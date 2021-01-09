@@ -1,4 +1,4 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,8 +1,5 @@
 package com.challenge.luizalabs.service;
 
-import com.challenge.luizalabs.dto.CustomerDtoResponse;
-import com.challenge.luizalabs.dto.ProductDto;
-import com.challenge.luizalabs.dto.WishListDtoResponse;
 import com.challenge.luizalabs.exception.EntityAlreadyExistsException;
 import com.challenge.luizalabs.exception.EntityNotFoundException;
 import com.challenge.luizalabs.exception.InternalServerErrorException;
@@ -11,6 +8,9 @@ import com.challenge.luizalabs.model.Product;
 import com.challenge.luizalabs.model.WishList;
 import com.challenge.luizalabs.repository.ProductRepository;
 import com.challenge.luizalabs.repository.WishListRepository;
+import com.challenge.luizalabs.v1.dto.CustomerDtoResponse;
+import com.challenge.luizalabs.v1.dto.ProductDto;
+import com.challenge.luizalabs.v1.dto.WishListDtoResponse;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -43,6 +43,13 @@ public class WishListService {
   @Autowired
   private ProductRepository productRepository;
 
+  /**
+   * Method responsible to save a wish list by customer id and product id.
+   *
+   * @param customerId {Long}
+   * @param productId  {UUID}
+   * @return WishListDtoResponse
+   */
   public WishListDtoResponse save(final Long customerId, final UUID productId) {
     validateWishListAlreadyExists(customerId, productId);
 
@@ -72,6 +79,12 @@ public class WishListService {
     return wishListDtoResponse;
   }
 
+  /**
+   * Method responsible to get a wish list by customer id.
+   *
+   * @param customerId {Long}
+   * @return WishListDtoResponse
+   */
   public WishListDtoResponse getProductsByCustomerId(final Long customerId) {
     final List<WishList> wishList = getWishLists(customerId);
 
@@ -114,6 +127,12 @@ public class WishListService {
         .build();
   }
 
+  /**
+   * Method responsible to delete a wish list by customer id.
+   *
+   * @param customerId {Long}
+   * @return
+   */
   public void delete(final Long customerId) {
     if (!getWishLists(customerId).isEmpty()) {
       this.wishListRepository.deleteByCustomerId(customerId);
