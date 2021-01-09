@@ -2,32 +2,32 @@ package com.challenge.luizalabs.model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
 public class Product {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Type(type = "uuid-char")
+  private UUID id;
 
   @NotNull
   @Column
@@ -43,7 +43,7 @@ public class Product {
   private String image;
 
   @Column
-  private BigDecimal reviewScore;
+  private float reviewScore;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
   private List<WishList> wishLists;

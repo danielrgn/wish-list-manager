@@ -1,18 +1,13 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
-@NoArgsConstructor
 public class CustomerDtoRequest {
 
   @NotNull(message = "The field name can't be null")

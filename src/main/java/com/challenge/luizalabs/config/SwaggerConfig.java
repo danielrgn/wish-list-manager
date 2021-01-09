@@ -76,10 +76,13 @@ public class SwaggerConfig {
         .displayOperationId(Boolean.valueOf(swaggerConfigProperties.getDisplayOperationId()))
         .defaultModelsExpandDepth(Integer.valueOf(swaggerConfigProperties
             .getDefaultModelsExpandDepth()))
-        .defaultModelExpandDepth(Integer.valueOf(swaggerConfigProperties.getDefaultModelExpandDepth()))
+        .defaultModelExpandDepth(Integer
+            .valueOf(swaggerConfigProperties.getDefaultModelExpandDepth()))
         .defaultModelRendering(ModelRendering.EXAMPLE)
-        .displayRequestDuration(Boolean.valueOf(swaggerConfigProperties.getDisplayRequestDuration()))
-        .docExpansion(DocExpansion.NONE).filter(Boolean.valueOf(swaggerConfigProperties.getFilter()))
+        .displayRequestDuration(Boolean
+            .valueOf(swaggerConfigProperties.getDisplayRequestDuration()))
+        .docExpansion(DocExpansion.NONE).filter(Boolean
+            .valueOf(swaggerConfigProperties.getFilter()))
         .maxDisplayedTags(Integer.valueOf(swaggerConfigProperties.getMaxDisplayedTags()))
         .operationsSorter(OperationsSorter.ALPHA)
         .showExtensions(Boolean.valueOf(swaggerConfigProperties.getShowExtensions()))

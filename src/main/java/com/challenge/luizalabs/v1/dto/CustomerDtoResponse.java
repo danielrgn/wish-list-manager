@@ -1,20 +1,15 @@
-package com.challenge.luizalabs.dto;
+package com.challenge.luizalabs.v1.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-
-@AllArgsConstructor
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Builder
+@AllArgsConstructor
 public class CustomerDtoResponse {
 
   @NotNull

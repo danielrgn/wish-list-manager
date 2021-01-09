@@ -17,20 +17,22 @@ management:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/wlm?useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/wlm?useSSL=false&useUnicode=true&connectionCollation=utf8_general_ci&characterEncoding=UTF-8
     username: wlm
     password: wlm
-    connectionInitSql: "SET NAMES 'utf8mb4'"
     hikari:
-      connection-init-sql: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
       minimumIdle: ${HIKARI_MINIMUM_IDLE:10}
       maximumPoolSize: ${HIKARI_MAXIMUM_POLL_SIZE:10}
 
   jpa:
     hibernate.ddl-auto: update
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
+        connection:
+          charSet: UTF-8
+          characterEncoding: utf8_general_ci
+          useUnicode: true
         dialect: org.hibernate.dialect.MySQL5Dialect
 
 server.port: ${PORT:8080}
@@ -62,3 +64,11 @@ swagger:
   licenseUrl: "https://github.com/danielrgn/wish-list-manager/blob/master/LICENSE"
   author: "Daniel Rigoni"
   githubUrl: "https://github.com/danielrgn"
+
+api:
+  challenge:
+    product:
+      url: "http://challenge-api.luizalabs.com/api/product/"
+  retry:
+    maxAttempts: 3
+    waitDurationMilliseconds: 5000

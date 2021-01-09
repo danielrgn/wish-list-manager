@@ -1,8 +1,9 @@
 package com.challenge.luizalabs.v1.controller;
 
-import com.challenge.luizalabs.dto.CustomerDtoRequest;
-import com.challenge.luizalabs.dto.CustomerDtoResponse;
 import com.challenge.luizalabs.service.CustomerService;
+import com.challenge.luizalabs.v1.dto.CustomerDtoRequest;
+import com.challenge.luizalabs.v1.dto.CustomerDtoResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/customer")
-@Api(value="Customers")
+@Api(value = "Customer")
 public class CustomerController {
 
   @Autowired
@@ -32,7 +33,7 @@ public class CustomerController {
   /**
    * Method responsible to return all customers.
    *
-   * @return {Array<CustomerDtoResponse/>}
+   * @return {ResponseEntity}
    */
   @GetMapping
   @ApiOperation(value = "Get all customers", response = CustomerDtoResponse.class,
@@ -46,7 +47,7 @@ public class CustomerController {
    * Method responsible to return only one customer by id.
    *
    * @param id {Long} customer id
-   * @return {CustomerDtoResponse}
+   * @return {ResponseEntity}
    */
   @GetMapping(value = "/{id}")
   @ApiOperation(value = "Get customer by id", response = CustomerDtoResponse.class,
@@ -60,8 +61,8 @@ public class CustomerController {
    * Method responsible to insert new customer (it isn't possible to create two customers
    * with the same e-mail).
    *
-   * @param CustomerDtoRequest {<String>email</String>, <String>name</String>}
-   * @return {CustomerDtoResponse}
+   * @param customer {CustomerDtoRequest}
+   * @return {ResponseEntity}
    */
   @PostMapping
   @ApiOperation(value = "Insert customer", response = CustomerDtoResponse.class,
@@ -76,8 +77,8 @@ public class CustomerController {
    * Method responsible to update a customer.
    *
    * @param id                 {Long} customer id
-   * @param CustomerDtoRequest {<String/> email, <String/> name}
-   * @return {CustomerDtoResponse}
+   * @param customer {CustomerDtoRequest}
+   * @return {ResponseEntity}
    */
   @PutMapping(value = "{id}")
   @ApiOperation(value = "Update customer", response = CustomerDtoResponse.class,
@@ -92,7 +93,7 @@ public class CustomerController {
    * Method responsible to delete a customer by id.
    *
    * @param id {Long} customer id
-   * @return {}
+   * @return {ResponseEntity}
    */
   @DeleteMapping(value = "{id}")
   @ApiOperation(value = "Delete customer by id", authorizations = @Authorization(value = "Bearer"))
