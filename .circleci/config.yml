@@ -6,7 +6,8 @@ jobs:
       - image: circleci/openjdk:11
     steps:
       - checkout
-      - run: ./mvnw -Dmaven.test.skip=true package
+      - run: ./mvnw checkstyle:check -q
+      - run: ./mvnw dependency:go-offline -q
 
   test:
     docker:
@@ -19,7 +20,8 @@ jobs:
           MYSQL_PASSWORD: wlm
     steps:
       - checkout
-      - run: ./mvnw test
+      - run: ./mvnw test jacoco:report
+      - run: cat target/site/jacoco/index.html
 
 workflows:
   version: 2
