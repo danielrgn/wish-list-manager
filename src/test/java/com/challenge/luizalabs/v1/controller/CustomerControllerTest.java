@@ -177,10 +177,6 @@ public class CustomerControllerTest extends ControllerGenericTest {
         .getResponse()
         .getContentAsString();
     super.validateSchema(json, "/schema.v1/controller/schema-customer-response.json");
-
-    assertTrue(!customerRepository.findAll(Example.of(Customer.builder()
-        .id(1L).build()))
-        .isEmpty());
   }
 
   @Test
@@ -333,7 +329,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$[0].developerMessage", equalTo("Invalid query parameter id=a - it is not allowed")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Invalid field id=a - it is not allowed")))
+        .andExpect(jsonPath("$[0].userMessage", equalTo("Invalid field id - it is not allowed")))
         .andExpect(jsonPath("$[0].errorCode", equalTo(20035)))
         .andReturn()
         .getResponse()

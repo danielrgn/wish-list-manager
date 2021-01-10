@@ -3,6 +3,7 @@ package com.challenge.luizalabs.factory;
 import com.challenge.luizalabs.model.Product;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public class ProductFactory extends AbstractFactory {
   @Override
   public Product simple() {
     return Product.builder()
+        .id(UUID.randomUUID())
         .price(BigDecimal.valueOf(0.0))
         .brand(RandomStringUtils.random(10, true, false))
         .title(RandomStringUtils.random(10, true, false))

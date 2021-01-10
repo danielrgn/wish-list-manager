@@ -67,7 +67,7 @@ swagger:
 api:
   challenge:
     product:
-      url: "http://challenge-api.luizalabs.com/api/product/"
+      url: "http://localhost:8090/api/product/"
   retry:
     maxAttempts: 3
     waitDurationMilliseconds: 5000
