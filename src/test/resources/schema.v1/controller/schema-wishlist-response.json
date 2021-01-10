@@ -1,0 +1,53 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "customerId",
+    "wishListProducts"
+  ],
+  "properties": {
+    "customerId": {
+      "$id": "#/properties/customerId",
+      "type": "integer"
+    },
+    "wishListProducts": {
+      "$id": "#/properties/wishListProducts",
+      "type": "array",
+      "items": {
+        "$id": "#/properties/wishListProducts/items",
+        "type": "object",
+        "required": [
+          "price",
+          "image",
+          "title",
+          "reviewScore",
+          "link"
+        ],
+        "properties": {
+          "price": {
+            "$id": "#/properties/wishListProducts/price",
+            "type": "number"
+          },
+          "image": {
+            "$id": "#/properties/wishListProducts/image",
+            "type": "string"
+          },
+          "title": {
+            "$id": "#/properties/wishListProducts/title",
+            "type": "string"
+          },
+          "reviewScore": {
+            "$id": "#/properties/wishListProducts/reviewScore",
+            "type": "number"
+          },
+          "link": {
+            "$id": "#/properties/wishListProducts/link",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

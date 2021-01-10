@@ -32,6 +32,7 @@
 		<jsonschema.version>1.12.1</jsonschema.version>
 		<openpojo.version>0.8.12</openpojo.version>
 		<plpojo.version>0.7.6</plpojo.version>
+		<wiremock.version>2.24.0</wiremock.version>
 	</properties>
 
 	<dependencies>
@@ -159,6 +160,12 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>${wiremock.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
