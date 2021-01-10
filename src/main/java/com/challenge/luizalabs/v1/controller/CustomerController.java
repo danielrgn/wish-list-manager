@@ -49,7 +49,7 @@ public class CustomerController {
    * @param id {Long} customer id
    * @return {ResponseEntity}
    */
-  @GetMapping(value = "/{id}")
+  @GetMapping(value = "{id}")
   @ApiOperation(value = "Get customer by id", response = CustomerDtoResponse.class,
       authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
