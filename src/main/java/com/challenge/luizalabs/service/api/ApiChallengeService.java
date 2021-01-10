@@ -7,6 +7,7 @@ import com.challenge.luizalabs.v1.dto.ProductDto;
 import java.text.MessageFormat;
 import java.util.UUID;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,7 +35,7 @@ public class ApiChallengeService {
    * @param productId {UUID}
    * @return ProductDto
    */
-  public ProductDto getProductById(final UUID productId) {
+  public ProductDto getProductById(final @NonNull UUID productId) {
     ResponseEntity<ProductDto> productResponseBody;
 
     try {

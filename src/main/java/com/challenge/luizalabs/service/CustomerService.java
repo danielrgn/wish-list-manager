@@ -98,7 +98,6 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
    * Method responsible delete a customer by id.
    *
    * @param id {Long}
-   * @return void
    */
   @Override
   public void delete(final Long id) {
