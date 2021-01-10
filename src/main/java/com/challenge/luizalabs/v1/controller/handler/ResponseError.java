@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +24,9 @@ public class ResponseError implements Serializable {
   private static final long serialVersionUID = -4682076860908920999L;
   private List<ErrorMessage> errorMessages;
 
-  @Getter
-  @Setter
+  @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  @EqualsAndHashCode
-  @ToString
   @Builder
   public static class ErrorMessage implements Serializable {
 

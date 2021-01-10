@@ -32,6 +32,7 @@
 		<jsonschema.version>1.12.1</jsonschema.version>
 		<openpojo.version>0.8.12</openpojo.version>
 		<plpojo.version>0.7.6</plpojo.version>
+		<wiremock.version>2.24.0</wiremock.version>
 	</properties>
 
 	<dependencies>
@@ -90,12 +91,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -159,6 +154,12 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>${wiremock.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>

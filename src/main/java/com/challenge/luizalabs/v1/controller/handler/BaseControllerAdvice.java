@@ -5,25 +5,16 @@ import static java.text.MessageFormat.format;
 import com.challenge.luizalabs.exception.EntityAlreadyExistsException;
 import com.challenge.luizalabs.exception.EntityNotFoundException;
 import com.challenge.luizalabs.exception.InternalServerErrorException;
-import com.challenge.luizalabs.exception.MissingParameterException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
 
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,7 +23,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 @ControllerAdvice
@@ -104,44 +94,6 @@ public class BaseControllerAdvice {
     return errorMessages;
   }
 
-  @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public List<ResponseError.ErrorMessage> exception(final HttpMessageNotReadableException ex) {
-
-    final Throwable cause = ex.getCause();
-
-    if (cause instanceof JsonMappingException) {
-
-      final JsonMappingException jsonMappingException = (JsonMappingException) cause;
-
-      final String field = this.getField(jsonMappingException);
-
-      final String message = Optional.of(ex)
-          .map(NestedRuntimeException::getMessage)
-          .orElse("");
-
-      if (message.contains("java.util.UUID")) {
-        return Collections.singletonList(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format(
-                    "Invalid body parameter {0} - it must be filled with a valid UUID",
-                    field))
-            .userMessage(
-                format(
-                    "Invalid field {0} - it must be filled with a valid UUID",
-                    field))
-            .errorCode(20012)
-            .build());
-      }
-    }
-
-    return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage("Malformed request body")
-        .userMessage("Malformed request body")
-        .errorCode(20020).build());
-  }
-
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
   @ResponseBody
@@ -152,18 +104,6 @@ public class BaseControllerAdvice {
         .developerMessage("Method not allowed")
         .userMessage("Method not allowed")
         .errorCode(20021).build());
-  }
-
-  @ExceptionHandler(NoHandlerFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ResponseBody
-  public List<ResponseError.ErrorMessage> exception(
-      final NoHandlerFoundException ex) {
-
-    return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage("Resource not found")
-        .userMessage("Resource not found")
-        .errorCode(20022).build());
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
@@ -218,35 +158,6 @@ public class BaseControllerAdvice {
     }
   }
 
-  @ExceptionHandler(ConstraintViolationException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public List<ResponseError.ErrorMessage> exception(final ConstraintViolationException ex) {
-    final Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-
-    final List<ResponseError.ErrorMessage> errorMessages = new ArrayList<>();
-
-    constraintViolations.forEach(constraint -> {
-      final String messageTemplate = constraint.getConstraintDescriptor().getMessageTemplate();
-      String field = "";
-      for (Path.Node node : constraint.getPropertyPath()) {
-        field = node.getName();
-      }
-      if ("{javax.validation.constraints.Email.message}".equals(messageTemplate)) {
-        errorMessages.add(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format("Invalid query parameter {0} - it "
-                    + "must be filled with a valid email", field))
-            .userMessage(
-                format("Invalid field {0} - it "
-                    + "must be filled with a valid email", field))
-            .errorCode(20013)
-            .build());
-      }
-    });
-    return errorMessages;
-  }
-
   @ExceptionHandler(EmptyResultDataAccessException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ResponseBody
@@ -274,38 +185,4 @@ public class BaseControllerAdvice {
         .errorCode(10000)
         .build());
   }
-
-  @ResponseBody
-  @ExceptionHandler(MissingParameterException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public List<ResponseError.ErrorMessage> exceptionHandler(final MissingParameterException ex) {
-    return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("Missing {0} parameter {1}", ex.getParameters()))
-        .userMessage(
-            format("Field {1} is required and can not be empty", ex.getParameters()))
-        .errorCode(20001)
-        .build());
-  }
-
-  private String getField(final JsonMappingException jsonMappingException) {
-    return jsonMappingException.getPath().stream()
-        .map(t -> t.getFieldName() != null ? t.getFieldName() : "[" + t.getIndex() + "]")
-        .reduce((t, u) -> {
-          if (u.contains("[")) {
-            return t + u;
-          } else {
-            return t + "." + u;
-          }
-        })
-        .orElse(null);
-  }
-
-  private Long getValue(final FieldError fieldError) {
-    return (Long) Optional.ofNullable(fieldError.getArguments())
-        .filter(t -> t.length > 1)
-        .map(t -> t[1])
-        .orElse(null);
-  }
-
 }

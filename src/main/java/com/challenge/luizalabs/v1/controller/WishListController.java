@@ -39,7 +39,7 @@ public class WishListController {
       authorizations = @Authorization(value = "Bearer"))
   public ResponseEntity<?> getWishListByCustomerId(@PathVariable Long customerId) {
     final WishListDtoResponse wishListDtoResponse =
-        this.wishListService.getProductsByCustomerId(customerId);
+        this.wishListService.getProductsByCustomerId(customerId, null);
     return ResponseEntity.ok(wishListDtoResponse);
   }
 

@@ -12,7 +12,6 @@ import com.challenge.luizalabs.v1.dto.CustomerDtoResponse;
 import com.challenge.luizalabs.v1.dto.ProductDto;
 import com.challenge.luizalabs.v1.dto.WishListDtoResponse;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +69,7 @@ public class WishListService {
 
         wishListRepository.save(wishList);
 
-        wishListDtoResponse = getProductsByCustomerId(customerId);
+        wishListDtoResponse = getProductsByCustomerId(customerId, productApi);
       }
     } catch (InternalServerErrorException e) {
       throw new InternalServerErrorException("Failed fetch api");
@@ -85,7 +84,8 @@ public class WishListService {
    * @param customerId {Long}
    * @return WishListDtoResponse
    */
-  public WishListDtoResponse getProductsByCustomerId(final Long customerId) {
+  public WishListDtoResponse getProductsByCustomerId(final Long customerId,
+                                                     final ProductDto productDto) {
     final List<WishList> wishList = getWishLists(customerId);
 
     List<WishListDtoResponse.WishListProduct> products = new ArrayList<>();
@@ -99,7 +99,10 @@ public class WishListService {
           .orElse(null);
 
       try {
-        ProductDto productApi = productService.getProductApi(productId);
+        ProductDto productApi = productDto;
+        if (Optional.ofNullable(productDto).isEmpty()) {
+          productApi = productService.getProductApi(productId);
+        }
 
         Optional.ofNullable(productApi).ifPresent(p ->
             products.add(WishListDtoResponse.WishListProduct.builder()
@@ -131,7 +134,6 @@ public class WishListService {
    * Method responsible to delete a wish list by customer id.
    *
    * @param customerId {Long}
-   * @return
    */
   public void delete(final Long customerId) {
     if (!getWishLists(customerId).isEmpty()) {
@@ -167,8 +169,7 @@ public class WishListService {
         wishListRepository.existsWishListByCustomerIdAndProductId(customerId, productId);
 
     if (alreadyExistProductInWishList) {
-      throw new EntityAlreadyExistsException(
-          MessageFormat.format("wish list, but this product and this customer", productId));
+      throw new EntityAlreadyExistsException("Wish list, but this product and this customer");
     }
   }
 }
