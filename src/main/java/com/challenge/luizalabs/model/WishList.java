@@ -1,5 +1,6 @@
 package com.challenge.luizalabs.model;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "wishlist")
-public class WishList {
+public class WishList implements Serializable {
+  private static final long serialVersionUID = 4966971705801088035L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
