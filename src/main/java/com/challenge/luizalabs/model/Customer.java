@@ -1,5 +1,6 @@
 package com.challenge.luizalabs.model;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "customer")
-public class Customer {
+public class Customer implements Serializable {
+  private static final long serialVersionUID = -2792915862037255610L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

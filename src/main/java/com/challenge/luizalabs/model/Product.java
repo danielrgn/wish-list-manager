@@ -1,5 +1,6 @@
 package com.challenge.luizalabs.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +24,8 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
+  private static final long serialVersionUID = 3318407561699535857L;
 
   @Id
   @Type(type = "uuid-char")

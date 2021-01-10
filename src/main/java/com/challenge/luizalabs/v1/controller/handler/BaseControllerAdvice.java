@@ -76,42 +76,6 @@ public class BaseControllerAdvice {
                 .errorCode(20001)
                 .build());
 
-      } else if ("Min".equalsIgnoreCase(field.getCode())) {
-
-        errorMessages.add(
-            ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format(
-                        "Invalid body parameter {0}"
-                            + " - it must be filled with a value greater than {1}",
-                        field.getField(),
-                        this.getValue(field)))
-                .userMessage(
-                    format(
-                        "Invalid field {0} - it must be filled with a value greater than {1}",
-                        field.getField(),
-                        this.getValue(field)))
-                .errorCode(20004)
-                .build());
-
-      } else if ("Max".equalsIgnoreCase(field.getCode())) {
-
-        errorMessages.add(
-            ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format(
-                        "Invalid body parameter {0}"
-                            + " - it must be filled with a value lesser than {1}",
-                        field.getField(),
-                        this.getValue(field)))
-                .userMessage(
-                    format(
-                        "Invalid field {0} - it must be filled with a value lesser than {1}",
-                        field.getField(),
-                        this.getValue(field)))
-                .errorCode(20005)
-                .build());
-
       } else if ("Email".equalsIgnoreCase(field.getCode())) {
 
         errorMessages.add(
@@ -126,76 +90,6 @@ public class BaseControllerAdvice {
                         field.getField()))
                 .errorCode(20013)
                 .build());
-
-      } else if ("cpf".equalsIgnoreCase(field.getCode())) {
-
-        errorMessages.add(
-            ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format(
-                        "Invalid body parameter {0} - it must be filled with a valid CPF",
-                        field.getField()))
-                .userMessage(
-                    format(
-                        "Invalid field {0} - it must be filled with a valid CPF",
-                        field.getField()))
-                .errorCode(20010)
-                .build());
-
-      } else if ("cnpj".equalsIgnoreCase(field.getCode())) {
-
-        errorMessages.add(
-            ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format(
-                        "Invalid body parameter {0} - it must be filled with a valid CNPJ",
-                        field.getField()))
-                .userMessage(
-                    format(
-                        "Invalid field {0} - it must be filled with a valid CNPJ",
-                        field.getField()))
-                .errorCode(20011)
-                .build());
-      } else if ("size".equalsIgnoreCase(field.getCode())) {
-
-        Integer param01 = Integer.valueOf(field.getArguments()[1].toString());
-        Integer param02 = Integer.valueOf(field.getArguments()[2].toString());
-
-        if (field.getRejectedValue().toString().length() > param01
-            && field.getRejectedValue().toString().length() > param02) {
-          errorMessages.add(ResponseError.ErrorMessage.builder()
-              .developerMessage(
-                  format(
-                      "Invalid body parameter {0} - "
-                          + "it must be filled with a value lesser or equals than {1}",
-                      field.getField(),
-                      param01 > param02 ? param01 : param02))
-              .userMessage(
-                  format(
-                      "Invalid field {0} - "
-                          + "it must be filled with a value lesser or equals than {1}",
-                      field.getField(),
-                      param01 > param02 ? param01 : param02))
-              .errorCode(20088)
-              .build());
-        } else {
-          errorMessages.add(
-              ResponseError.ErrorMessage.builder()
-                  .developerMessage(
-                      format(
-                          "Invalid body parameter {0} - "
-                              + "it must be filled with a value greater or equals than {1}",
-                          field.getField(),
-                          param01 > param02 ? param02 : param01))
-                  .userMessage(
-                      format(
-                          "Invalid field {0} - "
-                              + "it must be filled with a value greater or equals than {1}",
-                          field.getField(),
-                          param01 > param02 ? param02 : param01))
-                  .errorCode(20087)
-                  .build());
-        }
       } else {
 
         errorMessages.add(
@@ -227,46 +121,7 @@ public class BaseControllerAdvice {
           .map(NestedRuntimeException::getMessage)
           .orElse("");
 
-      if (message.contains("java.lang.Short")
-          || message.contains("java.lang.Integer")
-          || message.contains("java.lang.Long")) {
-
-        return Collections.singletonList(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format(
-                    "Invalid body parameter {0} - it must be filled with a valid integer number",
-                    field))
-            .userMessage(
-                format(
-                    "Invalid field {0} - it must be filled with a valid integer number",
-                    field))
-            .errorCode(20002).build());
-
-      } else if (message.contains("java.lang.Double")
-          || message.contains("java.lang.Float")) {
-
-        return Collections.singletonList(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format("Invalid body parameter {0} - it must be filled with a valid number", field))
-            .userMessage(
-                format("Invalid field {0} - it must be filled with a valid number", field))
-            .errorCode(20007).build());
-
-      } else if (message.contains("java.lang.Boolean")) {
-
-        return Collections.singletonList(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format(
-                    "Invalid body parameter {0}"
-                        + " - it must be filled with a valid boolean (true or false)",
-                    field))
-            .userMessage(
-                format(
-                    "Invalid field {0} - it must be filled with a true or false",
-                    field))
-            .errorCode(20009).build());
-
-      } else if (message.contains("java.util.UUID")) {
+      if (message.contains("java.util.UUID")) {
         return Collections.singletonList(ResponseError.ErrorMessage.builder()
             .developerMessage(
                 format(
@@ -377,60 +232,7 @@ public class BaseControllerAdvice {
       for (Path.Node node : constraint.getPropertyPath()) {
         field = node.getName();
       }
-      if ("{javax.validation.constraints.Max.message}".equals(messageTemplate)) {
-        final String size = constraint
-            .getConstraintDescriptor().getAttributes().get("value").toString();
-        errorMessages.add(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format("Invalid query parameter {0} - "
-                    + "it must be filled with a value lesser or equals than {1}", field, size))
-            .userMessage(
-                format("Invalid field {0} - "
-                    + "it must be filled with a value lesser or equals than {1}", field, size))
-            .errorCode(20088)
-            .build());
-      } else if ("{javax.validation.constraints.Min.message}".equals(messageTemplate)) {
-        final String size = constraint
-            .getConstraintDescriptor().getAttributes().get("value").toString();
-        errorMessages.add(ResponseError.ErrorMessage.builder()
-            .developerMessage(
-                format("Invalid query parameter {0} - "
-                    + "it must be filled with a value greater or equals than {1}", field, size))
-            .userMessage(
-                format("Invalid field {0} - "
-                    + "it must be filled with a value greater or equals than {1}", field, size))
-            .errorCode(20087)
-            .build());
-      } else if ("{javax.validation.constraints.Size.message}".equals(messageTemplate)) {
-        final Integer minSize = Integer.valueOf(
-            constraint.getConstraintDescriptor().getAttributes().get("min").toString()
-        );
-        final Integer maxSize = Integer.valueOf(
-            constraint.getConstraintDescriptor().getAttributes().get("max").toString()
-        );
-        final String value = String.valueOf(constraint.getInvalidValue());
-        if (value.length() > maxSize) {
-          errorMessages.add(ResponseError.ErrorMessage.builder()
-              .developerMessage(
-                  format("Invalid query parameter {0} - "
-                      + "it must be filled with a value lesser or equals than {1}", field, maxSize))
-              .userMessage(
-                  format("Invalid field {0} - "
-                      + "it must be filled with a value lesser or equals than {1}", field, maxSize))
-              .errorCode(20088)
-              .build());
-        } else if (value.length() < minSize) {
-          errorMessages.add(ResponseError.ErrorMessage.builder()
-              .developerMessage(
-                  format("Invalid query parameter {0} - it "
-                      + "must be filled with a value greater or equals than {1}", field, minSize))
-              .userMessage(
-                  format("Invalid field {0} - it "
-                      + "must be filled with a value greater or equals than {1}", field, minSize))
-              .errorCode(20087)
-              .build());
-        }
-      } else if ("{javax.validation.constraints.Email.message}".equals(messageTemplate)) {
+      if ("{javax.validation.constraints.Email.message}".equals(messageTemplate)) {
         errorMessages.add(ResponseError.ErrorMessage.builder()
             .developerMessage(
                 format("Invalid query parameter {0} - it "

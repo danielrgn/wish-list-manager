@@ -4,6 +4,7 @@ import com.challenge.luizalabs.exception.EntityAlreadyExistsException;
 import com.challenge.luizalabs.exception.EntityNotFoundException;
 import com.challenge.luizalabs.model.Customer;
 import com.challenge.luizalabs.repository.CustomerRepository;
+import com.challenge.luizalabs.service.mapper.CustomerMapper;
 import com.challenge.luizalabs.v1.dto.CustomerDtoRequest;
 import com.challenge.luizalabs.v1.dto.CustomerDtoResponse;
 
@@ -54,11 +55,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
 
     final Customer customerSaved = customerRepository.save(customerObj);
 
-    return CustomerDtoResponse.builder()
-          .id(customerSaved.getId())
-          .name(customerSaved.getName())
-          .email(customerSaved.getEmail())
-        .build();
+    return CustomerMapper.serialize(customerSaved);
   }
 
   /**
@@ -76,11 +73,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
     }
 
     for (Customer c : customers) {
-      dto.add(CustomerDtoResponse.builder()
-          .id(c.getId())
-          .name(c.getName())
-          .email(c.getEmail())
-          .build());
+      dto.add(CustomerMapper.serialize(c));
     }
 
     return dto;
@@ -96,11 +89,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
   public CustomerDtoResponse getById(final Long id) {
     final Optional<Customer> customer = this.customerRepository.findById(id);
     if (customer.isPresent()) {
-      return CustomerDtoResponse.builder()
-          .id(customer.get().getId())
-          .name(customer.get().getName())
-          .email(customer.get().getEmail())
-          .build();
+      return CustomerMapper.serialize(customer.get());
     }
     throw new EntityNotFoundException("Customer");
   }
@@ -122,7 +111,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
 
     if (existCustomer && !customer.getId().equals(id)) {
       throw new EntityAlreadyExistsException(MessageFormat
-          .format("customer with email {0}", email));
+          .format("Customer with email {0}", email));
     }
   }
 }

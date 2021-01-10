@@ -1,0 +1,73 @@
+env: ${ENV}
+
+application:
+  env: ${ENV}
+  name: '@pom.name@'
+  description: '@pom.description@'
+  version: '@pom.version@'
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/wlm?useSSL=false&useUnicode=true&connectionCollation=utf8_general_ci&characterEncoding=UTF-8
+    username: wlm
+    password: wlm
+    hikari:
+      minimumIdle: ${HIKARI_MINIMUM_IDLE:10}
+      maximumPoolSize: ${HIKARI_MAXIMUM_POLL_SIZE:10}
+
+  jpa:
+    hibernate.ddl-auto: 'create-drop'
+    properties:
+      hibernate:
+        connection:
+          charSet: UTF-8
+          characterEncoding: utf8_general_ci
+          useUnicode: true
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+server.port: ${PORT:8080}
+
+oauth:
+  clientId: "admin"
+  clientSecret: "secret"
+  username: "admin"
+  password: "secret"
+  expiresIn: 86400
+  scopes: "web"
+  grantTypes: "password"
+
+swagger:
+  enabled: true
+  title: "WLM - Wish List Manager"
+  description: "Project to manager wish list"
+  useDefaultResponseMessages: false
+  enableUrlTemplating: false
+  deepLinking: true
+  defaultModelsExpandDepth: 1
+  defaultModelExpandDepth: 1
+  displayOperationId: false
+  displayRequestDuration: false
+  filter: false
+  maxDisplayedTags: 0
+  showExtensions: false
+  license: "GNU General Public License v3.0"
+  licenseUrl: "https://github.com/danielrgn/wish-list-manager/blob/master/LICENSE"
+  author: "Daniel Rigoni"
+  githubUrl: "https://github.com/danielrgn"
+
+api:
+  challenge:
+    product:
+      url: "http://challenge-api.luizalabs.com/api/product/"
+  retry:
+    maxAttempts: 3
+    waitDurationMilliseconds: 5000
