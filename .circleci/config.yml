@@ -1,4 +1,7 @@
-version: 2.0
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.2
 
 jobs:
   build:
@@ -21,7 +24,9 @@ jobs:
     steps:
       - checkout
       - run: ./mvnw test jacoco:report
-      - run: cat target/site/jacoco/index.html
+      - codecov/upload:
+          file: '*jacoco.xml'
+          token: 87303df9-c091-463e-bde3-89ab7a6563fe
 
 workflows:
   version: 2
