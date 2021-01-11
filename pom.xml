@@ -33,6 +33,9 @@
 		<openpojo.version>0.8.12</openpojo.version>
 		<plpojo.version>0.7.6</plpojo.version>
 		<wiremock.version>2.24.0</wiremock.version>
+		<micrometer-core.version>1.6.2</micrometer-core.version>
+		<javax-el.version>3.0.0</javax-el.version>
+		<random-beans.version>3.7.0</random-beans.version>
 	</properties>
 
 	<dependencies>
@@ -66,22 +69,17 @@
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
+			<version>${validation-api-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.13.Final</version>
+			<version>${hibernate-validator.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.el</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator-cdi</artifactId>
-			<version>7.0.0.Final</version>
+			<version>${javax-el.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -132,12 +130,12 @@
 		<dependency>
 			<groupId>io.github.benas</groupId>
 			<artifactId>random-beans</artifactId>
-			<version>3.7.0</version>
+			<version>${random-beans.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-core</artifactId>
-			<version>1.6.2</version>
+			<version>${micrometer-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -275,6 +273,13 @@
 					<execution>
 						<id>report</id>
 						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-code-coverage-report</id>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
