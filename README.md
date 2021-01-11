@@ -1,5 +1,10 @@
 # WLM - Wish List Manager
 
+[![Release](https://img.shields.io/github/release/danielrgn/wish-list-manager.svg?style=flat-square)](https://github.com/danielrgn/wish-list-manager/releases/latest)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](/LICENSE.md)
+[![Cicle-CI](https://circleci.com/gh/danielrgn/wish-list-manager.svg?style=shield)]()
+[![codecov](https://codecov.io/gh/danielrgn/wish-list-manager/branch/master/graph/badge.svg?token=DJGIEESK6I)](https://codecov.io/gh/danielrgn/wish-list-manager)
+
 > Essa API é responsável gerenciar a lista de desejos dos clientes.
 
 ## Requisitos

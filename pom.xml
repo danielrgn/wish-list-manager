@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.challenge</groupId>
 	<artifactId>luizalabs</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>luizalabs-wlm</name>
 	<description>Wish List Manager - Challenge Luizalabs</description>
 
@@ -27,15 +27,13 @@
 		<swagger-models.version>1.5.21</swagger-models.version>
 		<hibernate-validator.version>7.0.0.Final</hibernate-validator.version>
 		<resilience4j.version>0.13.2</resilience4j.version>
-		<jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<junit.version>4.12</junit.version>
 		<jsonschema.version>1.12.1</jsonschema.version>
 		<openpojo.version>0.8.12</openpojo.version>
 		<plpojo.version>0.7.6</plpojo.version>
 		<wiremock.version>2.24.0</wiremock.version>
-		<micrometer-core.version>1.6.2</micrometer-core.version>
-		<javax-el.version>3.0.0</javax-el.version>
-		<random-beans.version>3.7.0</random-beans.version>
 	</properties>
 
 	<dependencies>
@@ -69,17 +67,22 @@
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>${validation-api-version}</version>
+			<version>2.0.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate-validator.version}</version>
+			<version>6.0.13.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.el</artifactId>
-			<version>${javax-el.version}</version>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator-cdi</artifactId>
+			<version>7.0.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -130,12 +133,12 @@
 		<dependency>
 			<groupId>io.github.benas</groupId>
 			<artifactId>random-beans</artifactId>
-			<version>${random-beans.version}</version>
+			<version>3.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-core</artifactId>
-			<version>${micrometer-core.version}</version>
+			<version>1.6.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -176,6 +179,7 @@
 	</dependencies>
 
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -246,45 +250,20 @@
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
-						<configuration>
-							<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>jacoco-check</id>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<rule>
-									<element>PACKAGE</element>
-									<limits>
-										<limit>
-											<counter>LINE</counter>
-											<value>COVEREDRATIO</value>
-											<minimum>0.0</minimum>
-										</limit>
-									</limits>
-								</rule>
-							</rules>
-						</configuration>
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>generate-code-coverage-report</id>
 						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
