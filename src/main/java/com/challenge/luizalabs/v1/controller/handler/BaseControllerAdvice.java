@@ -34,12 +34,9 @@ public class BaseControllerAdvice {
   @ResponseBody
   public List<ResponseError.ErrorMessage> exception(final Exception ex) {
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            "Internal server error")
-        .userMessage(
+        .errorMessage(
             "Was encountered an error when processing your request."
                 + " We apologize for the inconvenience.")
-        .errorCode(10000)
         .build());
   }
 
@@ -59,34 +56,24 @@ public class BaseControllerAdvice {
 
         errorMessages.add(
             ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format("Missing body parameter {0}", field.getField()))
-                .userMessage(
+                .errorMessage(
                     format("Field {0} is required and can not be empty", field.getField()))
-                .errorCode(20001)
                 .build());
 
       } else if ("Email".equalsIgnoreCase(field.getCode())) {
 
         errorMessages.add(
             ResponseError.ErrorMessage.builder()
-                .developerMessage(
-                    format(
-                        "Invalid body parameter {0} - it must be filled with a valid email",
-                        field.getField()))
-                .userMessage(
+                .errorMessage(
                     format(
                         "Invalid field {0} - it must be filled with a valid email",
                         field.getField()))
-                .errorCode(20013)
                 .build());
       } else {
 
         errorMessages.add(
             ResponseError.ErrorMessage.builder()
-                .developerMessage("Malformed request body")
-                .userMessage("Malformed request body")
-                .errorCode(20020)
+                .errorMessage("Malformed request body")
                 .build());
       }
     });
@@ -101,9 +88,8 @@ public class BaseControllerAdvice {
       final HttpRequestMethodNotSupportedException ex) {
 
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage("Method not allowed")
-        .userMessage("Method not allowed")
-        .errorCode(20021).build());
+        .errorMessage("Method not allowed")
+        .build());
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
@@ -111,11 +97,8 @@ public class BaseControllerAdvice {
   @ResponseBody
   public List<ResponseError.ErrorMessage> exception(final EntityNotFoundException ex) {
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("{0} not found", ex.getParameters()))
-        .userMessage(
+        .errorMessage(
             format("You attempted to get a {0}, but did not find any", ex.getParameters()))
-        .errorCode(20023)
         .build());
   }
 
@@ -124,11 +107,8 @@ public class BaseControllerAdvice {
   @ResponseBody
   public List<ResponseError.ErrorMessage> exception(final EntityAlreadyExistsException ex) {
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("{0} already exists", ex.getParameters()))
-        .userMessage(
+        .errorMessage(
             format("You attempted to create {0} already exists", ex.getParameters()))
-        .errorCode(20033)
         .build());
   }
 
@@ -138,22 +118,13 @@ public class BaseControllerAdvice {
   public List<ResponseError.ErrorMessage> exception(final MethodArgumentTypeMismatchException ex) {
     if (ex.getRequiredType() == UUID.class) {
       return Collections.singletonList(ResponseError.ErrorMessage.builder()
-          .developerMessage(
-              MessageFormat.format(
-                  "Invalid parameter {0} - it must be filled with a valid UUID",
-                  ex.getName()))
-          .userMessage(MessageFormat.format(
+          .errorMessage(MessageFormat.format(
               "Invalid field {0} - it must be filled with a valid UUID", ex.getName()))
-          .errorCode(20012)
           .build());
     } else {
       return Collections.singletonList(ResponseError.ErrorMessage.builder()
-          .developerMessage(
-              MessageFormat.format("Invalid query parameter {0} - it is not allowed",
-                  ex.getName() + "=" + ex.getValue()))
-          .userMessage(MessageFormat.format(
+          .errorMessage(MessageFormat.format(
               "Invalid field {0} - it is not allowed", ex.getName()))
-          .errorCode(20035)
           .build());
     }
   }
@@ -163,12 +134,9 @@ public class BaseControllerAdvice {
   @ResponseBody
   public List<ResponseError.ErrorMessage> exception(final EmptyResultDataAccessException ex) {
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("{0}", ex.getMessage()))
-        .userMessage(
+        .errorMessage(
             "We not found this entity with the id requested."
                 + " We apologize for the inconvenience.")
-        .errorCode(55500)
         .build());
   }
 
@@ -177,12 +145,9 @@ public class BaseControllerAdvice {
   @ResponseBody
   public List<ResponseError.ErrorMessage> exception(final InternalServerErrorException ex) {
     return Collections.singletonList(ResponseError.ErrorMessage.builder()
-        .developerMessage(
-            format("Internal server error {0}", ex.getParameters()))
-        .userMessage(
+        .errorMessage(
             "Was encountered an error when processing your request."
                 + " We apologize for the inconvenience.")
-        .errorCode(10000)
         .build());
   }
 }

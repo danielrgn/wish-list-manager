@@ -9,22 +9,12 @@
     "type": "object",
     "additionalProperties": false,
     "required": [
-      "developerMessage",
-      "userMessage",
-      "errorCode"
+      "errorMessage"
     ],
     "properties": {
-      "developerMessage": {
-        "$id": "#/items/properties/developerMessage",
+      "errorMessage": {
+        "$id": "#/items/properties/errorMessage",
         "type": "string"
-      },
-      "userMessage": {
-        "$id": "#/items/properties/userMessage",
-        "type": "string"
-      },
-      "errorCode": {
-        "$id": "#/items/properties/errorCode",
-        "type": "integer"
       }
     }
   }

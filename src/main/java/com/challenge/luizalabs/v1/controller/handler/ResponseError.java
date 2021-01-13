@@ -32,9 +32,7 @@ public class ResponseError implements Serializable {
 
     private static final long serialVersionUID = 1952575470352539304L;
 
-    private String developerMessage;
-    private String userMessage;
-    private int errorCode;
+    private String errorMessage;
   }
 
 }
