@@ -72,9 +72,9 @@ http://localhost:8080/swagger-ui.html#/
 
 **Autenticação e Autorização:**
 
-- Para todos os endpoints da aplicação é necessário o `Authorization: Bearer Token`;
+- Para todos os endpoints da aplicação é necessário o `Authorization: Bearer <access_token>`;
 - Para conseguir se autenticar, é necessário fazer a requisição no endpoint `/oauth/token` para se obter o access_token (na collection do Postman abaixo possui um exemplo);
-- Depois de conseguir o `access_token`, basta inclui-lo nas próximas requisições junto a palavra Bearer, exemplo: `Bearer 5588das-21c1-4580-8647-ds321dsaCss`
+- Depois de conseguir o `<access_token>`, basta inclui-lo nas próximas requisições junto a palavra Bearer, exemplo: `Bearer 5588das-21c1-4580-8647-ds321dsaCss`
 
 **Collection Postman:**
 
