@@ -49,7 +49,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
         .email(email)
         .build();
 
-    if (id != null) {
+    if (Optional.ofNullable(id).isPresent()) {
       customerObj.setId(id);
     }
 
@@ -72,9 +72,7 @@ public class CustomerService implements ServiceBase<CustomerDtoRequest, Customer
       throw new EntityNotFoundException("Customer");
     }
 
-    for (Customer c : customers) {
-      dto.add(CustomerMapper.serialize(c));
-    }
+    customers.forEach(c -> dto.add(CustomerMapper.serialize(c)));
 
     return dto;
   }
