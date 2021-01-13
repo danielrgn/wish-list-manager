@@ -3,6 +3,7 @@ package com.challenge.luizalabs.v1.controller;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,7 +64,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
     Customer customer = customerRepository.save(customerFactory.simple());
 
     final String json = this.mockMvc.perform(delete(urlPathCustomerResource.concat("/{id}"), customer.getId().toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNoContent())
         .andReturn()
         .getResponse()
@@ -80,11 +81,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaDeleteWithCustomerNotExist() {
     final String json = this.mockMvc.perform(delete(urlPathCustomerResource.concat("/{id}"), "1")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("No class com.challenge.luizalabs.model.Customer entity with id 1 exists!")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("We not found this entity with the id requested. We apologize for the inconvenience.")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(55500)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("We not found this entity with the id requested. We apologize for the inconvenience.")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -102,7 +101,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
     Customer customer = customerRepository.save(customerFactory.simple());
 
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/{id}"), customer.getId().toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn()
         .getResponse()
@@ -115,11 +114,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaGetCustomerByIdNotExist() {
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/{id}"), "1")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Customer not found")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("You attempted to get a Customer, but did not find any")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20023)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("You attempted to get a Customer, but did not find any")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -137,7 +134,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
     customerRepository.save(customerFactory.simple());
 
     final String json = this.mockMvc.perform(get(urlPathCustomerResource)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn()
         .getResponse()
@@ -150,11 +147,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaGetAllCustomersNotExist() {
     final String json = this.mockMvc.perform(get(urlPathCustomerResource)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Customer not found")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("You attempted to get a Customer, but did not find any")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20023)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("You attempted to get a Customer, but did not find any")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -171,7 +166,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
   public void validateSchemaInsertCustomerSuccess() {
     final String json = this.mockMvc.perform(post(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequestFactory.simple()))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isCreated())
         .andReturn()
         .getResponse()
@@ -188,11 +183,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequest))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Invalid body parameter email - it must be filled with a valid email")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Invalid field email - it must be filled with a valid email")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20013)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Invalid field email - it must be filled with a valid email")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -212,11 +205,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequest))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Missing body parameter name")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Field name is required and can not be empty")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20001)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Field name is required and can not be empty")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -236,11 +227,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequest))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Missing body parameter email")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Field email is required and can not be empty")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20001)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Field email is required and can not be empty")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -263,11 +252,10 @@ public class CustomerControllerTest extends ControllerGenericTest {
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequest))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isConflict())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo(MessageFormat.format("Customer with email {0} already exists", customer.getEmail()))))
-        .andExpect(jsonPath("$[0].userMessage", equalTo(MessageFormat.format("You attempted to create Customer with email {0} already exists", customer.getEmail()))))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20033)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo(MessageFormat.format(
+            "You attempted to create Customer with email {0} already exists", customer.getEmail()))))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -291,7 +279,7 @@ public class CustomerControllerTest extends ControllerGenericTest {
 
     final String json = this.mockMvc.perform(put(urlPathCustomerResource.concat("/{id}"), customer.getId())
         .content(getJsonMapped(customerDtoRequest))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn()
         .getResponse()
@@ -310,11 +298,9 @@ public class CustomerControllerTest extends ControllerGenericTest {
   public void validateSchemaUpdateCustomerWithoutParamId() {
     final String json = this.mockMvc.perform(put(urlPathCustomerResource)
         .content(getJsonMapped(customerDtoRequestFactory.simple()))
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isMethodNotAllowed())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Method not allowed")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Method not allowed")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20021)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Method not allowed")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -326,11 +312,26 @@ public class CustomerControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaDeleteWithParamIdInvalid() {
     final String json = this.mockMvc.perform(delete(urlPathCustomerResource.concat("/{id}"), "a")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Invalid query parameter id=a - it is not allowed")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Invalid field id - it is not allowed")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20035)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Invalid field id - it is not allowed")))
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+    super.validateSchema(json, "/schema.v1/controller/schema-error-response.json");
+  }
+
+  @Test
+  @Rollback
+  @SneakyThrows
+  public void validateSchemaWithJsonBodyRequestIsInvalid() {
+    CustomerDtoRequest customerDtoRequest = customerDtoRequestFactory.simple();
+
+    final String json = this.mockMvc.perform(post(urlPathCustomerResource)
+        .content(getJsonMapped(customerDtoRequest).replace(",",""))
+        .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Was encountered an error when processing your request. We apologize for the inconvenience.")))
         .andReturn()
         .getResponse()
         .getContentAsString();

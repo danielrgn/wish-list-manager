@@ -26,7 +26,7 @@ spring:
 
   jpa:
     hibernate.ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         connection:
@@ -38,11 +38,11 @@ spring:
 server.port: ${PORT:8080}
 
 oauth:
-  clientId: "admin"
-  clientSecret: "secret"
-  username: "admin"
-  password: "secret"
-  expiresIn: 86400
+  clientId: ${OAUTH_CLIENT_ID:admin}
+  clientSecret: ${OAUTH_CLIENT_SECRET:secret}
+  username: ${OAUTH_USERNAME:admin}
+  password: ${OAUTH_PASSWORD:secret}
+  expiresIn: ${OAUTH_EXPIRES_IN:86400}
   scopes: "web"
   grantTypes: "password"
 
@@ -70,5 +70,5 @@ api:
     product:
       url: "http://challenge-api.luizalabs.com/api/product/"
   retry:
-    maxAttempts: 3
-    waitDurationMilliseconds: 5000
+    maxAttempts: ${RETRY_MAX_ATTEMPTS:3}
+    waitDurationMilliseconds: ${RETRY_WAIT_DURATION_MILLISECONDS:5000}

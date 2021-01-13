@@ -5,22 +5,25 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.3.RELEASE</version>
+		<version>2.3.7.RELEASE</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.challenge</groupId>
-	<artifactId>luizalabs</artifactId>
+	<groupId>com.challenge.luizalabs</groupId>
+	<artifactId>wish-list-manager</artifactId>
 	<version>1.0.0</version>
 	<name>luizalabs-wlm</name>
 	<description>Wish List Manager - Challenge Luizalabs</description>
 
 	<properties>
 		<java.version>11</java.version>
+		<springframework.version>5.2.0.RELEASE</springframework.version>
 		<spotbugs-maven-plugin-version>3.1.6</spotbugs-maven-plugin-version>
 		<spotbugs-version>3.1.11</spotbugs-version>
 		<maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
 		<checkstyle-version>8.17</checkstyle-version>
 		<validation-api-version>2.0.1.Final</validation-api-version>
+		<hibernate-validator-version>6.0.13.Final</hibernate-validator-version>
+		<hibernate-validator-cdi-version>7.0.0.Final</hibernate-validator-cdi-version>
 		<spring-security-oauth2-version>2.3.3.RELEASE</spring-security-oauth2-version>
 		<swagger.version>2.9.2</swagger.version>
 		<swagger-annotations.version>1.5.21</swagger-annotations.version>
@@ -34,6 +37,9 @@
 		<openpojo.version>0.8.12</openpojo.version>
 		<plpojo.version>0.7.6</plpojo.version>
 		<wiremock.version>2.24.0</wiremock.version>
+		<randombeans.version>3.7.0</randombeans.version>
+		<micrometer.version>1.6.2</micrometer.version>
+		<javax-el-version>3.0.0</javax-el-version>
 	</properties>
 
 	<dependencies>
@@ -46,6 +52,12 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>${springframework.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-retry</artifactId>
 			<version>${resilience4j.version}</version>
@@ -54,6 +66,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vaadin.external.google</groupId>
+					<artifactId>android-json</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
@@ -67,22 +85,17 @@
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
+			<version>${validation-api-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.13.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.el</artifactId>
-			<version>3.0.0</version>
+			<version>${hibernate-validator-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator-cdi</artifactId>
-			<version>7.0.0.Final</version>
+			<version>${hibernate-validator-cdi-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -131,14 +144,19 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>${javax-el-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>io.github.benas</groupId>
 			<artifactId>random-beans</artifactId>
-			<version>3.7.0</version>
+			<version>${randombeans.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-core</artifactId>
-			<version>1.6.2</version>
+			<version>${micrometer.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -204,10 +222,6 @@
 						<version>${spotbugs-version}</version>
 					</dependency>
 				</dependencies>
-				<configuration>
-					<effort>Max</effort>
-					<excludeFilterFile>${session.executionRootDirectory}/src/main/resources/spotbugsFilter.xml</excludeFilterFile>
-				</configuration>
 				<executions>
 					<execution>
 						<phase>compile</phase>

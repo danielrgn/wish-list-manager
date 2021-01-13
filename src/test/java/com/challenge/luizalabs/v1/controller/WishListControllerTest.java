@@ -3,6 +3,7 @@ package com.challenge.luizalabs.v1.controller;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -87,7 +88,7 @@ public class WishListControllerTest extends ControllerGenericTest {
     Long customerId = wishList.getCustomer().getId();
 
     final String json = this.mockMvc.perform(delete(urlPathCustomerResource.concat("/customer/{customerId}"), customerId.toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNoContent())
         .andReturn()
         .getResponse()
@@ -107,11 +108,9 @@ public class WishListControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaDeleteWishListByCustomerIdWithCustomerWithoutExists() {
     final String json = this.mockMvc.perform(delete(urlPathCustomerResource.concat("/customer/{customerId}"), "1")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Wishlist not found")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("You attempted to get a Wishlist, but did not find any")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20023)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("You attempted to get a Wishlist, but did not find any")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -135,7 +134,7 @@ public class WishListControllerTest extends ControllerGenericTest {
     Long customerId = wishList.getCustomer().getId();
 
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/customer/{customerId}"), customerId.toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn()
         .getResponse()
@@ -154,11 +153,9 @@ public class WishListControllerTest extends ControllerGenericTest {
     String productId = wishList.getProduct().getId().toString();
 
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/customer/{customerId}"), customerId.toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo(MessageFormat.format("Product {0} not found", productId))))
-        .andExpect(jsonPath("$[0].userMessage", equalTo(MessageFormat.format("You attempted to get a Product {0}, but did not find any", productId))))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20023)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo(MessageFormat.format("You attempted to get a Product {0}, but did not find any", productId))))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -182,7 +179,7 @@ public class WishListControllerTest extends ControllerGenericTest {
     Long customerId = wishList.getCustomer().getId();
 
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/customer/{customerId}"), customerId.toString())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn()
         .getResponse()
@@ -195,11 +192,9 @@ public class WishListControllerTest extends ControllerGenericTest {
   @SneakyThrows
   public void validateSchemaGetWishListByCustomerIdWithCustomerWithoutExists() {
     final String json = this.mockMvc.perform(get(urlPathCustomerResource.concat("/customer/{customerId}"), "1")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Wishlist not found")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("You attempted to get a Wishlist, but did not find any")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20023)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("You attempted to get a Wishlist, but did not find any")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -222,7 +217,7 @@ public class WishListControllerTest extends ControllerGenericTest {
     Customer customer = customerRepository.save(customerFactory.simple());
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource.concat("/customer/{customerId}/product/{productId}"), customer.getId().toString(), UUID.randomUUID())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isCreated())
         .andReturn()
         .getResponse()
@@ -248,11 +243,9 @@ public class WishListControllerTest extends ControllerGenericTest {
     String productId = wishList.getProduct().getId().toString();
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource.concat("/customer/{customerId}/product/{productId}"), customerId.toString(), productId)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isConflict())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Wish list, but this product and this customer already exists")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("You attempted to create Wish list, but this product and this customer already exists")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20033)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("You attempted to create Wish list, but this product and this customer already exists")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -269,11 +262,9 @@ public class WishListControllerTest extends ControllerGenericTest {
     Long customerId = wishList.getCustomer().getId();
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource.concat("/customer/{customerId}/product/{productId}"), customerId.toString(), "a")
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Invalid parameter productId - it must be filled with a valid UUID")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Invalid field productId - it must be filled with a valid UUID")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(20012)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Invalid field productId - it must be filled with a valid UUID")))
         .andReturn()
         .getResponse()
         .getContentAsString();
@@ -290,11 +281,9 @@ public class WishListControllerTest extends ControllerGenericTest {
     Long customerId = wishList.getCustomer().getId();
 
     final String json = this.mockMvc.perform(post(urlPathCustomerResource.concat("/customer/{customerId}/product/{productId}"), customerId.toString(), UUID.randomUUID())
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isInternalServerError())
-        .andExpect(jsonPath("$[0].developerMessage", equalTo("Internal server error Failed fetch api")))
-        .andExpect(jsonPath("$[0].userMessage", equalTo("Was encountered an error when processing your request. We apologize for the inconvenience.")))
-        .andExpect(jsonPath("$[0].errorCode", equalTo(10000)))
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Was encountered an error when processing your request. We apologize for the inconvenience.")))
         .andReturn()
         .getResponse()
         .getContentAsString();
