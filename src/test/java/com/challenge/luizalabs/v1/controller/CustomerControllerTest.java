@@ -320,4 +320,21 @@ public class CustomerControllerTest extends ControllerGenericTest {
         .getContentAsString();
     super.validateSchema(json, "/schema.v1/controller/schema-error-response.json");
   }
+
+  @Test
+  @Rollback
+  @SneakyThrows
+  public void validateSchemaWithJsonBodyRequestIsInvalid() {
+    CustomerDtoRequest customerDtoRequest = customerDtoRequestFactory.simple();
+
+    final String json = this.mockMvc.perform(post(urlPathCustomerResource)
+        .content(getJsonMapped(customerDtoRequest).replace(",",""))
+        .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$[0].errorMessage", equalTo("Was encountered an error when processing your request. We apologize for the inconvenience.")))
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+    super.validateSchema(json, "/schema.v1/controller/schema-error-response.json");
+  }
 }

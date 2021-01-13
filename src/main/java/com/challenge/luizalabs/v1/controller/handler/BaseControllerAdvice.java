@@ -69,12 +69,6 @@ public class BaseControllerAdvice {
                         "Invalid field {0} - it must be filled with a valid email",
                         field.getField()))
                 .build());
-      } else {
-
-        errorMessages.add(
-            ResponseError.ErrorMessage.builder()
-                .errorMessage("Malformed request body")
-                .build());
       }
     });
 
